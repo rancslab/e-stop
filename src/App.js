@@ -10,13 +10,15 @@ function App() {
         method: 'POST',
       });
 
-      if (!response.ok){
+      console.log('Response status:', response.status); // Log the response status
+
+      if (response.ok) {
+        setStatusMessage('Stop signal sent to RSU');
+      } else {
         setStatusMessage('Failed to send stop signal');
       }
-
-      setStatusMessage('Stop signal sent to RSU');
-      
-    } catch (error) {
+    } catch (error) {//for errors outside of your control (e.g. network errors)
+      console.error('Error: ', error);
       setStatusMessage('Error sending STOP signal');
     }
   };

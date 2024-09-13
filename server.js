@@ -14,6 +14,8 @@ const udpClient = dgram.createSocket('udp4');
 app.post('/send-stop-signal', (req, res) => {
     const stopSignal = Buffer.from([1]); //1 is the stop signal
 
+    console.log('Sending stop signal:', stopSignal);
+
     ///Send the UDP stop signal to the RSU
     udpClient.send(stopSignal, 44002, '127.0.0.1', (err) => {
         if (err) {
