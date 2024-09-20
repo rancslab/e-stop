@@ -17,7 +17,8 @@ app.post('/send-stop-signal', (req, res) => {
     console.log('Sending stop signal:', stopSignal);
 
     ///Send the UDP stop signal to the RSU
-    udpClient.send(stopSignal, 44002, '127.0.0.1', (err) => {
+    udpClient.send(stopSignal, 9000, 'localhost', (err) => { 
+      //Change 44002 to the port of RSU and 127.0.0.1 to the IP address of  RSU
         if (err) {
           return res.status(500).send('Failed to send stop signal');
         }
