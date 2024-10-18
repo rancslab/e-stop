@@ -1,31 +1,33 @@
 const dgram = require('dgram');
 const express = require('express');
-const cors = require('cors');
-const app = express();
+const cors = require('cors'); 
+
+const app = express(); // Initialize the app first
 const PORT = 3001;
 
-//Enbale CORS so your frontend can access this server
-app.use(cors());
+// Enable CORS so your frontend can access this server
+app.use(cors({ origin: '*' })); 
 
-//Crate a UDP client
+// Create a UDP client
 const udpClient = dgram.createSocket('udp4');
 
-//Define an endpoint to handle the stop signal
+// Define an endpoint to handle the stop signal
 app.post('/send-stop-signal', (req, res) => {
-    const stopSignal = Buffer.from([1]); //1 is the stop signal
+    const stopSignal = Buffer.from([1]); // 1 is the stop signal
 
-    console.log('Sending stop signal:', stopSignal);
+    console.log(stopSignal);
 
-    ///Send the UDP stop signal to the RSU
-    udpClient.send(stopSignal, 9000, 'localhost', (err) => { 
-      //Change 44002 to the port of RSU and 127.0.0.1 to the IP address of  RSU
+    // Send the UDP stop signal to the RSU
+    udpClient.send(stopSignal, 44002, 'localhost', (err) => {
         if (err) {
-          return res.status(500).send('Failed to send stop signal');
+            console.error('Error sending UDP signal:', err);
+            return res.status(500).send('Failed to send stop signal');
         }
         res.send('Stop signal sent successfully');
-      });
+    });
 });
 
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
